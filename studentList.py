@@ -3,9 +3,11 @@
 '''
 
 from os import system
+#from studentapi import *
 
 VERTICAL:int = 120
 HORIZONTAL:int = 30
+index:int = 9999
 
 students:list = [
     {
@@ -38,9 +40,12 @@ students:list = [
     },
 ]
 
-def displaylist()->None:
+def title(titletext:str)->None:
     system('cls')
-    print('STUDENT LIST'.center(VERTICAL, '-'))
+    print(f"{titletext.upper()}".center(VERTICAL, '-'))
+
+def displaylist()->None:
+    title('student list')
     header:list = list(students[0].keys())
     [print(f"{head.upper():<20}", end = "") for head in header]
     print()
@@ -50,11 +55,123 @@ def displaylist()->None:
         [print(f"{val.upper():<20}", end = "") for val in values]
         print()
 
-    print('-' * 120)
     print('NOTHING FOLLOWS'.center(VERTICAL, '-'))
 
+def addstudent()->None:
+    global students
+    title('add student')
+    idno:str = input('IDNO      : ')
+    lastname:str = input('LASTNAME  : ')
+    firstname:str = input('FIRSTNAME : ')
+    course:str = input('COURSE    : ')
+    level:str = input('LEVEL     : ')
+
+    #input validation
+    if idno != "" and lastname != "" and firstname != "" and course != "" and level != "":
+        student:dict = {
+            'idno' : idno,
+            'lastname' : lastname,
+            'firstname' : firstname,
+            'course' : course,
+            'level' : level,
+        }
+        students.append(student)
+        print()
+        print('NEW STUDENT ADDED'.center(VERTICAL, ' '))
+    else:
+        print()
+        print("FILL ALL FIELDS".center(VERTICAL, ' '))
+
+def findstudent()->None:
+    global index
+    title('find student')
+    idno:str = input("Enter IDNO: ")
+    student:dict={}
+    for student in students:
+        if student['idno'] == idno:
+            index = students.index(student)
+            break
+    
+    if index != 9999:
+        header:list = list(students[0].keys())
+        [print(f"{head.upper():<20}", end = "") for head in header]
+        print()
+        print('-' * 120)
+        values:list = list(student.values())
+        [print(f"{val.upper():<20}", end = "") for val in values]
+        print()
+        print('Student Found'.center(VERTICAL, ' '))
+    else:
+        print()
+        print('Student Not Found'.center(VERTICAL, ' '))
+
+def deletestudent()->None:
+    findstudent()
+    students.pop(index)
+    print('Student Deleted'.center(VERTICAL, ' '))
+
+def displaymenu()->None:
+    system('cls')
+    menuitems:list = [
+        "1. DISPLAY ALL STUDENT ",
+        "2. FIND STUDENT        ",
+        "3. ADD STUDENT         ",
+        "4. DELETE STUDENT      ",
+        "5. UPDATE STUDENT      ",
+        "0. QUIT/END            ",
+    ]
+
+    [print() for i in range(0,15-len(menuitems))]
+    print('=' * VERTICAL)
+    print("MENU".center(VERTICAL, " "))
+    print('=' * VERTICAL)
+    print()
+    [print(menuitems[i].center(VERTICAL,' ')) for i in range(0,len(menuitems))]
+
+def updatestudent()->bool:
+    title('update student')
+    findstudent()
+    print()
+    print('UPDATING STUDENT')
+
+    print(end =' ' * 50)
+    idno:str = input('IDNO      : ')
+    print(end =' ' * 50)
+    lastname:str = input('LASTNAME  : ')
+    print(end =' ' * 50)
+    firstname:str = input('FIRSTNAME : ')
+    print(end =' ' * 50)
+    course:str = input('COURSE    : ')
+    print(end =' ' * 50)
+    level:str = input('LEVEL     : ')
+
+    if idno != "" and lastname != "" and firstname != "" and course != "" and level != "":
+        student:dict = {
+            'idno' : idno,
+            'lastname' : lastname,
+            'firstname' : firstname,
+            'course' : course,
+            'level' : level,
+        }
+        students[index] = student
+        print('Student updated!')
+    
+    else:
+        print('Student not updated!')
+
 def main()->None:
-    displaylist()
+    option:int = 9999
+    while option != 0:
+        displaymenu()
+        print(end =' ' * 50)
+        option:int = int(input("Enter Option(0..6): "))
+        if option == 1: displaylist()
+        elif option == 2: findstudent()
+        elif option == 3: addstudent()
+        elif option == 4: deletestudent()
+        elif option == 5: updatestudent()
+        elif option == 0: print("program ended".center(VERTICAL))
+        input("Press any to continue...".center(VERTICAL, " "))
 
 if __name__ == "__main__":
     main() 
