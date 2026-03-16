@@ -60,10 +60,15 @@ def displaylist()->None:
 def addstudent()->None:
     global students
     title('add student')
+    print(end =' ' * 50)
     idno:str = input('IDNO      : ')
+    print(end =' ' * 50)
     lastname:str = input('LASTNAME  : ')
+    print(end =' ' * 50)
     firstname:str = input('FIRSTNAME : ')
+    print(end =' ' * 50)
     course:str = input('COURSE    : ')
+    print(end =' ' * 50)
     level:str = input('LEVEL     : ')
 
     #input validation
@@ -85,6 +90,7 @@ def addstudent()->None:
 def findstudent()->None:
     global index
     title('find student')
+    print(end =' ' * 50)
     idno:str = input("Enter IDNO: ")
     student:dict={}
     for student in students:
@@ -93,6 +99,8 @@ def findstudent()->None:
             break
     
     if index != 9999:
+        system('cls')
+        title('find student')
         header:list = list(students[0].keys())
         [print(f"{head.upper():<20}", end = "") for head in header]
         print()
@@ -104,11 +112,21 @@ def findstudent()->None:
     else:
         print()
         print('Student Not Found'.center(VERTICAL, ' '))
+        index = 9999
 
 def deletestudent()->None:
     findstudent()
-    students.pop(index)
-    print('Student Deleted'.center(VERTICAL, ' '))
+    if index != 9999:
+        message:str = "Are you sure you want to delete (Y/N) : "
+        inputspaces:int = int((VERTICAL - len(message)) / 2)
+        print(end = ' ' * inputspaces)
+        option:str = input(message)
+        print()
+        if option.upper() == "Y":
+            students.pop(index)
+            print('Student Deleted'.center(VERTICAL, ' '))
+        else:
+            print('Student Not Deleted'.center(VERTICAL, ' '))
 
 def displaymenu()->None:
     system('cls')
@@ -135,8 +153,6 @@ def updatestudent()->bool:
     print('UPDATING STUDENT')
 
     print(end =' ' * 50)
-    idno:str = input('IDNO      : ')
-    print(end =' ' * 50)
     lastname:str = input('LASTNAME  : ')
     print(end =' ' * 50)
     firstname:str = input('FIRSTNAME : ')
@@ -145,9 +161,8 @@ def updatestudent()->bool:
     print(end =' ' * 50)
     level:str = input('LEVEL     : ')
 
-    if idno != "" and lastname != "" and firstname != "" and course != "" and level != "":
+    if lastname != "" and firstname != "" and course != "" and level != "":
         student:dict = {
-            'idno' : idno,
             'lastname' : lastname,
             'firstname' : firstname,
             'course' : course,
