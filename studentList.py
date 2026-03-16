@@ -1,5 +1,5 @@
 """
-    Student List
+Student List
 """
 
 from os import system
@@ -10,55 +10,54 @@ NOT_FOUND: int = -1
 
 students: list = [
     {
-        'idno': '1000',
-        'lastname': 'golf',
-        'firstname': 'lima',
-        'course': 'bsit',
-        'level': '3',
+        "idno": "1000",
+        "lastname": "golf",
+        "firstname": "lima",
+        "course": "bsit",
+        "level": "3",
     },
     {
-        'idno': '2000',
-        'lastname': 'uniform',
-        'firstname': 'quebec',
-        'course': 'bscs',
-        'level': '3',
+        "idno": "2000",
+        "lastname": "uniform",
+        "firstname": "quebec",
+        "course": "bscs",
+        "level": "3",
     },
     {
-        'idno': '4000',
-        'lastname': 'india',
-        'firstname': 'papa',
-        'course': 'bsit',
-        'level': '2',
+        "idno": "4000",
+        "lastname": "india",
+        "firstname": "papa",
+        "course": "bsit",
+        "level": "2",
     },
     {
-        'idno': '5000',
-        'lastname': 'oscar',
-        'firstname': 'sierra',
-        'course': 'bsit',
-        'level': '1',
+        "idno": "5000",
+        "lastname": "oscar",
+        "firstname": "sierra",
+        "course": "bsit",
+        "level": "1",
     },
 ]
 
 
-
 def title(titletext: str) -> None:
-    system('cls')
-    print(f"{titletext.upper()}".center(CONSOLE_WIDTH, '-'))
+    system("cls")
+    print(f"{titletext.upper()}".center(CONSOLE_WIDTH, "-"))
 
 
 def displaylist() -> None:
-    title('student list')
+    title("student list")
 
     if not students:
-        print("NO STUDENTS FOUND".center(CONSOLE_WIDTH, ' '))
-        print('NOTHING FOLLOWS'.center(CONSOLE_WIDTH, '-'))
+        print("NO STUDENTS FOUND".center(CONSOLE_WIDTH, " "))
+        print("NOTHING FOLLOWS".center(CONSOLE_WIDTH, "-"))
         return
 
     header: list = list(students[0].keys())
     for head in header:
         print(f"{head.upper():<20}", end="")
     print()
-    print('-' * CONSOLE_WIDTH)
+    print("-" * CONSOLE_WIDTH)
 
     for student in students:
         values: list = list(student.values())
@@ -66,68 +65,101 @@ def displaylist() -> None:
             print(f"{str(val).upper():<20}", end="")
         print()
 
-    print('NOTHING FOLLOWS'.center(CONSOLE_WIDTH, '-'))
+    print("NOTHING FOLLOWS".center(CONSOLE_WIDTH, "-"))
 
 
 def addstudent() -> None:
-    title('add student')
-    idno:str = input('IDNO      : ')
-    lastname:str = input('LASTNAME  : ')
-    firstname:str = input('FIRSTNAME : ')
-    course:str = input('COURSE    : ')
-    level:str = input('LEVEL     : ')
+    title("add student")
+
+    print(end=" " * 50)
+    idno: str = input("IDNO      : ")
+    print(end=" " * 50)
+    lastname: str = input("LASTNAME  : ")
+    print(end=" " * 50)
+    firstname: str = input("FIRSTNAME : ")
+    print(end=" " * 50)
+    course: str = input("COURSE    : ")
+    print(end=" " * 50)
+    level: str = input("LEVEL     : ")
 
     if idno and lastname and firstname and course and level:
         for student in students:
-            if student['idno'] == idno:
+            if student["idno"] == idno:
                 print()
-                print('IDNO ALREADY EXISTS'.center(CONSOLE_WIDTH, ' '))
+                print("IDNO ALREADY EXISTS".center(CONSOLE_WIDTH, " "))
                 return
 
         student: dict = {
-            'idno': idno,
-            'lastname': lastname,
-            'firstname': firstname,
-            'course': course,
-            'level': level,
+            "idno": idno,
+            "lastname": lastname,
+            "firstname": firstname,
+            "course": course,
+            "level": level,
         }
         students.append(student)
         print()
-        print('NEW STUDENT ADDED'.center(CONSOLE_WIDTH, ' '))
+        print("NEW STUDENT ADDED".center(CONSOLE_WIDTH, " "))
     else:
         print()
-        print("FILL ALL FIELDS".center(CONSOLE_WIDTH, ' '))
+        print("FILL ALL FIELDS".center(CONSOLE_WIDTH, " "))
 
 
 def findstudent(show_result: bool = True) -> int:
-    title('find student')
-    idno:str = input("Enter IDNO: ")
-    student:dict={}
-    for student in students:
-        if student['idno'] == idno:
+    title("find student")
+
+    print(end=" " * 50)
+    idno: str = input("Enter IDNO: ")
+
+    index = NOT_FOUND
+    for i, student in enumerate(students):
+        if student["idno"] == idno:
             index = i
             break
-    
-    if index != 9999:
-        header:list = list(students[0].keys())
-        [print(f"{head.upper():<20}", end = "") for head in header]
-        print()
-        print('-' * 120)
-        values:list = list(student.values())
-        [print(f"{val.upper():<20}", end = "") for val in values]
-        print()
-        print('Student Found'.center(VERTICAL, ' '))
+
+    if index != NOT_FOUND:
+        if show_result:
+            title("student found")
+            print()
+            print("-" * CONSOLE_WIDTH)
+
+            header: list = list(students[0].keys())
+            for head in header:
+                print(f"{head.upper():<20}", end="")
+            print()
+            print("-" * CONSOLE_WIDTH)
+
+            values: list = list(students[index].values())
+            for val in values:
+                print(f"{str(val).upper():<20}", end="")
+            print()
+            print("NOTHING FOLLOWS".center(CONSOLE_WIDTH, "-"))
+        return index
     else:
         print()
-        print('Student Not Found'.center(VERTICAL, ' '))
+        print("STUDENT NOT FOUND".center(CONSOLE_WIDTH, " "))
+        return NOT_FOUND
 
-def deletestudent()->None:
-    findstudent()
-    students.pop(index)
-    print('Student Deleted'.center(VERTICAL, ' '))
+
+def deletestudent() -> None:
+    index = findstudent()
+
+    if index == NOT_FOUND:
+        return
+
+    message: str = "Are you sure you want to delete? Y/N : "
+    print()
+    print(end=" " * int((CONSOLE_WIDTH - len(message)) / 2))
+    option: str = input(message)
+
+    if option.upper() == "Y":
+        students.pop(index)
+        print("STUDENT DELETED".center(CONSOLE_WIDTH, " "))
+    else:
+        print("STUDENT NOT DELETED".center(CONSOLE_WIDTH, " "))
+
 
 def displaymenu() -> None:
-    system('cls')
+    system("cls")
     menuitems: list = [
         "1. DISPLAY ALL STUDENT ",
         "2. FIND STUDENT        ",
@@ -140,13 +172,13 @@ def displaymenu() -> None:
     for _ in range(0, 15 - len(menuitems)):
         print()
 
-    print('=' * CONSOLE_WIDTH)
+    print("=" * CONSOLE_WIDTH)
     print("MENU".center(CONSOLE_WIDTH, " "))
-    print('=' * CONSOLE_WIDTH)
+    print("=" * CONSOLE_WIDTH)
     print()
 
     for item in menuitems:
-        print(item.center(CONSOLE_WIDTH, ' '))
+        print(item.center(CONSOLE_WIDTH, " "))
 
 
 def updatestudent() -> None:
@@ -156,31 +188,36 @@ def updatestudent() -> None:
         return
 
     print()
-    print('UPDATING STUDENT'.center(CONSOLE_WIDTH, ' '))
+    print("UPDATING STUDENT".center(CONSOLE_WIDTH, " "))
 
-    print(end =' ' * 50)
-    idno:str = input('IDNO      : ')
-    print(end =' ' * 50)
-    lastname:str = input('LASTNAME  : ')
-    print(end =' ' * 50)
-    firstname:str = input('FIRSTNAME : ')
-    print(end =' ' * 50)
-    course:str = input('COURSE    : ')
-    print(end =' ' * 50)
-    level:str = input('LEVEL     : ')
+    print(end=" " * 50)
+    idno: str = input("IDNO      : ")
+    print(end=" " * 50)
+    lastname: str = input("LASTNAME  : ")
+    print(end=" " * 50)
+    firstname: str = input("FIRSTNAME : ")
+    print(end=" " * 50)
+    course: str = input("COURSE    : ")
+    print(end=" " * 50)
+    level: str = input("LEVEL     : ")
 
-    if idno != "" and lastname != "" and firstname != "" and course != "" and level != "":
-        student:dict = {
-            'idno' : idno,
-            'lastname' : lastname,
-            'firstname' : firstname,
-            'course' : course,
-            'level' : level,
+    if idno and lastname and firstname and course and level:
+        for student in students:
+            if student["idno"] == idno:
+                print()
+                print("IDNO ALREADY EXISTS".center(CONSOLE_WIDTH, " "))
+                return
+        student: dict = {
+            "idno": idno,
+            "lastname": lastname,
+            "firstname": firstname,
+            "course": course,
+            "level": level,
         }
         students[index] = student
-        print('STUDENT UPDATED!'.center(CONSOLE_WIDTH, ' '))
+        print("STUDENT UPDATED!".center(CONSOLE_WIDTH, " "))
     else:
-        print('STUDENT NOT UPDATED!'.center(CONSOLE_WIDTH, ' '))
+        print("STUDENT NOT UPDATED!".center(CONSOLE_WIDTH, " "))
 
 
 def main() -> None:
@@ -188,11 +225,11 @@ def main() -> None:
 
     while option != 0:
         displaymenu()
-        print(end=' ' * 50)
+        print(end=" " * 50)
 
         raw = input("Enter Option(0..5): ")
         if not raw.isdigit():
-            print("INVALID OPTION".center(CONSOLE_WIDTH, ' '))
+            print("INVALID OPTION".center(CONSOLE_WIDTH, " "))
             input("Press Enter to continue...".center(CONSOLE_WIDTH, " "))
             continue
 
@@ -211,8 +248,7 @@ def main() -> None:
         elif option == 0:
             print("PROGRAM ENDED".center(CONSOLE_WIDTH))
         else:
-            print("INVALID OPTION".center(CONSOLE_WIDTH, ' '))
-
+            print("INVALID OPTION".center(CONSOLE_WIDTH, " "))
         if option != 0:
             input("Press Enter to continue...".center(CONSOLE_WIDTH, " "))
 
