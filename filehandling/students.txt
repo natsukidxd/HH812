@@ -1,0 +1,3 @@
+{"idno" : "21516596", "firstname" : "krist dave", "lastname" : "ferrer", "course" : "bsit", "level" : "4"}
+{"idno" : "10000000", "firstname" : "alpha", "lastname" : "beta", "course" : "bscs", "level" : "1"}
+{"idno" : "20000000", "firstname" : "kevin", "lastname" : "durant", "course" : "bscpe", "level" : "2"}
