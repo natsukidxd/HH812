@@ -13,21 +13,22 @@ def getrecord(idno: str) -> tuple:
         if idno == value[0]:
             return item, data.index(item)
 
-    return [], -1
+    return {}, -1
 
 
 def deleterecord(idno: str) -> bool:
+    students: list = getall()
     ok: bool = False
     data_str, index_str = getrecord(idno)
-    data: list = list(data_str)
-    index: int = int(index_str)
-    if data != []:
-        print(data)
-        print(index)
+    student_data: dict = dict(data_str)
+    student_index: int = int(index_str)
+    if data != {}:
+        print(student_data)
+        print(student_index)
         option: str = input("Delete this (Y/N)?: ")
         if option.upper() == "Y":
-            data.pop(index)
-            updater(data)
+            students.pop(student_index)
+            updater(students)
             ok = True
             return ok
     else:

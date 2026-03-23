@@ -19,7 +19,11 @@ def loader() -> list:
 def updater(new_data: list) -> None:
     try:
         file = open(filename, "w")
-        [file.write(str(item) + "\n") for item in new_data]
+        new_data_str: str = ""
+        [new_data_str.join(item) + "\n" for item in new_data]
+        print(new_data_str)
+        #file.write(new_data_str)
+        #[file.write(str(item) + "\n") for item in new_data]
 
     except Exception as e:
         print(f"Error: {e}")
