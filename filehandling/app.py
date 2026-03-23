@@ -1,5 +1,5 @@
 from os import system
-import ast
+from ast import literal_eval
 
 filename: str = "students.txt"
 students: list = []
