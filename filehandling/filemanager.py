@@ -6,29 +6,31 @@ data: list = []
 
 
 def loader() -> list:
+    global data
+    data.clear()  
     try:
-        file = open(filename)
-        raw_data: str = file.readlines()
-        [data.append(literal_eval(temp_data)) for temp_data in raw_data]
+        file = open(filename, "r")
+        raw_data = file.readlines()
+        for temp_data in raw_data:
+            if temp_data.strip():
+                data.append(literal_eval(temp_data))
     except Exception as e:
         print(f"Error: {e}")
     finally:
         file.close()
     return data
 
+
 def updater(new_data: list) -> None:
     try:
         file = open(filename, "w")
-        new_data_str: str = ""
-        [new_data_str.join(item) + "\n" for item in new_data]
-        print(new_data_str)
-        #file.write(new_data_str)
-        #[file.write(str(item) + "\n") for item in new_data]
-
+        for item in new_data:
+            file.write(str(item) + "\n")
     except Exception as e:
         print(f"Error: {e}")
     finally:
         file.close()
+
 
 def appender() -> None:
     try:

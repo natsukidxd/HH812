@@ -17,23 +17,20 @@ def getrecord(idno: str) -> tuple:
 
 
 def deleterecord(idno: str) -> bool:
-    students: list = getall()
-    ok: bool = False
-    data_str, index_str = getrecord(idno)
-    student_data: dict = dict(data_str)
-    student_index: int = int(index_str)
-    if data != {}:
-        print(student_data)
-        print(student_index)
-        option: str = input("Delete this (Y/N)?: ")
+    students = getall()
+    student_data, student_index = getrecord(idno)
+
+    if student_index != -1:
+        print(f"Found: {student_data}")
+        option = input("Are you sure you want to delete this student? (Y/N): ")
         if option.upper() == "Y":
             students.pop(student_index)
             updater(students)
-            ok = True
-            return ok
+            print("Record deleted successfully.")
+            return True
     else:
-        print('No student found')
-    return ok
+        print("No student found")
+    return False
 
 
 def addrecord(**kwargs) -> bool:

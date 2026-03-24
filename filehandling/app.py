@@ -11,7 +11,7 @@ def getallstudents() -> None:
 
     file = open(filename, "r")
     for line in file:
-        student: dict = ast.literal_eval(line.strip())
+        student: dict = literal_eval(line.strip())
         students.append(student)
     file.close()
 
