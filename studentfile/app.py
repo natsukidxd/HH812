@@ -48,6 +48,6 @@ def getall() -> None:
 
 # Usage
 getall()
-update_student('1002', 'bonifacio', 'undress', 'bsit', '3')
+update_student('1002', 'asdasd', 'asdasd', 'asdasd', 'asd')
 print("\nAfter Update:")
 getall()

@@ -1,5 +1,5 @@
 filename: str = "books.txt"
-data = []
+data: list = []
 
 
 def load() -> None:
@@ -39,12 +39,29 @@ def update_book(*args) -> None:
             data[i] = ",".join(flds_list)
             save_to_file()
             return
-    print("Student not found.")
+    print("Book not found.")
 
 
-def add_book(**kwargs) -> None:
-    book: dict = kwargs
-    data.append(book)
+def add_book(*args) -> None:
+    load()
+    if not args:
+        print("No book data provided.")
+        return
+
+    # Store records in the same CSV format that `update_book()` / `getall()` expect.
+    bookdata = ",".join(str(i).strip() for i in args)
+    data.append(bookdata)
+    save_to_file()
+    print(data)
+
+def find_book(isbn: str) -> list:
+    load()
+    for item in data:
+        fields: list = item.split(",")
+        if fields[0] == isbn:
+            return fields
+        
+    return []
 
 
 def getall() -> None:
