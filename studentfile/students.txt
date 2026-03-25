@@ -1,0 +1,5 @@
+1000,alpha,bravo,bscpe,3
+1001,charlie,delta,bscs,4
+1002,bonifacio,undress,bsit,3
+1003,golf,hotel,bscs,1
+1006,xxxx,yyyy,bsit,2

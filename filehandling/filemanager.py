@@ -7,7 +7,7 @@ data: list = []
 
 def loader() -> list:
     global data
-    data.clear()  
+    data.clear()
     try:
         file = open(filename, "r")
         raw_data = file.readlines()
