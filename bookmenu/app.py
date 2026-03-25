@@ -61,6 +61,40 @@ def findbook() -> None:
         print("No book found".center(WIDTH, " "))
 
 
+def editbook() -> None:
+    titlemenu("edit book")
+    isbn: str = ""
+    title: str = ""
+    copyright: str = ""
+    author: str = ""
+    price: float = 0
+    qty: int = 0
+    try:
+        print(end=" " * int((WIDTH - 13) / 2))
+        isbn = input("ISBN       : ")
+        print(end=" " * int((WIDTH - 13) / 2))
+        title = input("TITLE      : ")
+        print(end=" " * int((WIDTH - 13) / 2))
+        copyright = input("COPYRIGHT  : ")
+        print(end=" " * int((WIDTH - 13) / 2))
+        author = input("AUTHOR     : ")
+        print(end=" " * int((WIDTH - 13) / 2))
+        price = float(input("PRICE      : "))
+        print(end=" " * int((WIDTH - 13) / 2))
+        qty = int(input("QTY        : "))
+        print(end=" " * int((WIDTH - 13) / 2))
+        print(f"TOTAL      : {float(price * qty):.2f}")
+    except Exception as err:
+        errormessage: str = f"Error: {err}"
+        print(end=" " * int((WIDTH - len(errormessage)) / 2))
+        print(errormessage)
+        return
+    
+    isokay:bool = update_book(isbn, title, copyright, author, str(price), str(qty))
+
+    if isokay: print("Book updated.".center(WIDTH, " "))
+    else: print("Book not found".center(WIDTH, " "))
+
 def titlemenu(titletext: str) -> None:
     system("cls")
     print(f"{titletext.upper()}".center(WIDTH, "-"))

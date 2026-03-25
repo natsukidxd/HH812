@@ -23,7 +23,7 @@ def save_to_file() -> None:
         print(f"Error saving: {ex}")
 
 
-def update_book(*args) -> None:
+def update_book(*args) -> bool:
     load()
     target_id = args[0]
     for i, item in enumerate(data):
@@ -38,8 +38,9 @@ def update_book(*args) -> None:
 
             data[i] = ",".join(flds_list)
             save_to_file()
-            return
-    print("Book not found.")
+            return True
+    #print("Book not found.")
+    return False
 
 
 def add_book(*args) -> None:
@@ -48,7 +49,6 @@ def add_book(*args) -> None:
         print("No book data provided.")
         return
 
-    # Store records in the same CSV format that `update_book()` / `getall()` expect.
     bookdata = ",".join(str(i).strip() for i in args)
     data.append(bookdata)
     save_to_file()
