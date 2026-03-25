@@ -52,7 +52,7 @@ def add_book(*args) -> None:
     bookdata = ",".join(str(i).strip() for i in args)
     data.append(bookdata)
     save_to_file()
-    print(data)
+
 
 def find_book(isbn: str) -> list:
     load()
@@ -60,7 +60,7 @@ def find_book(isbn: str) -> list:
         fields: list = item.split(",")
         if fields[0] == isbn:
             return fields
-        
+
     return []
 
 

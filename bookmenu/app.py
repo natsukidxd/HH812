@@ -57,7 +57,7 @@ def findbook() -> None:
         print(f"QTY        : {book_data[5]}")
         print(end=" " * int((WIDTH - 13) / 2))
         print(f"TOTAL      : {float(float(book_data[4]) * int(book_data[5])):.2f}")
-    else: 
+    else:
         print("No book found".center(WIDTH, " "))
 
 
