@@ -1,3 +1,4 @@
+from tkinter import Widget
 from bookapi import *
 from os import system
 
@@ -17,25 +18,31 @@ def addbook() -> None:
     try:
         print(end=" " * int((WIDTH - 13) / 2))
         isbn = input("ISBN       : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        title = input("TITLE      : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        copyright = input("COPYRIGHT  : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        author = input("AUTHOR     : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        price = float(input("PRICE      : "))
-        print(end=" " * int((WIDTH - 13) / 2))
-        qty = int(input("QTY        : "))
-        print(end=" " * int((WIDTH - 13) / 2))
-        print(f"TOTAL      : {float(price * qty):.2f}")
+        book_data: list = find_book(isbn)
+        if book_data == []:
+            print(end=" " * int((WIDTH - 13) / 2))
+            title = input("TITLE      : ")
+            print(end=" " * int((WIDTH - 13) / 2))
+            copyright = input("COPYRIGHT  : ")
+            print(end=" " * int((WIDTH - 13) / 2))
+            author = input("AUTHOR     : ")
+            print(end=" " * int((WIDTH - 13) / 2))
+            price = float(input("PRICE      : "))
+            print(end=" " * int((WIDTH - 13) / 2))
+            qty = int(input("QTY        : "))
+            print(end=" " * int((WIDTH - 13) / 2))
+            print(f"TOTAL      : {float(price * qty):.2f}")
+            add_book(isbn, title, copyright, author, str(price), str(qty))
+        else: print("ISBN already exists. Try again.".center(WIDTH, " "))
     except Exception as err:
         errormessage: str = f"Error: {err}"
         print(end=" " * int((WIDTH - len(errormessage)) / 2))
         print(errormessage)
+        print("Book was not added.".center(WIDTH, " "))
+        print()
         return
 
-    add_book(isbn, title, copyright, author, str(price), str(qty))
+    print()
 
 
 def findbook() -> None:
@@ -59,6 +66,7 @@ def findbook() -> None:
         print(f"TOTAL      : {float(float(book_data[4]) * int(book_data[5])):.2f}")
     else:
         print("No book found".center(WIDTH, " "))
+    print()
 
 
 def editbook() -> None:
@@ -72,28 +80,83 @@ def editbook() -> None:
     try:
         print(end=" " * int((WIDTH - 13) / 2))
         isbn = input("ISBN       : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        title = input("TITLE      : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        copyright = input("COPYRIGHT  : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        author = input("AUTHOR     : ")
-        print(end=" " * int((WIDTH - 13) / 2))
-        price = float(input("PRICE      : "))
-        print(end=" " * int((WIDTH - 13) / 2))
-        qty = int(input("QTY        : "))
-        print(end=" " * int((WIDTH - 13) / 2))
-        print(f"TOTAL      : {float(price * qty):.2f}")
+        book_data: list = find_book(isbn)
+        if book_data != []:
+            print(end=" " * int((WIDTH - 13) / 2))
+            print(f"TITLE      : {book_data[1]}")
+            print(end=" " * int((WIDTH - 13) / 2))
+            print(f"COPYRIGHT  : {book_data[2]}")
+            print(end=" " * int((WIDTH - 13) / 2))
+            print(f"AUTHOR     : {book_data[3]}")
+            print(end=" " * int((WIDTH - 13) / 2))
+            print(f"PRICE      : {book_data[4]}")
+            print(end=" " * int((WIDTH - 13) / 2))
+            print(f"QTY        : {book_data[5]}")
+            print(end=" " * int((WIDTH - 13) / 2))
+            print(f"TOTAL      : {float(float(book_data[4]) * int(book_data[5])):.2f}")
+            confirm_msg: str = "Are you sure you want to edit this book? (Y/N): "
+            print(end=" " * int((WIDTH - len(confirm_msg)) / 2))
+            option:str = input(confirm_msg)
+            if option.upper() == "Y":
+                print("Editing book...".center(WIDTH, " "))
+                print(end=" " * int((WIDTH - 13) / 2))
+                title = input("TITLE      : ")
+                print(end=" " * int((WIDTH - 13) / 2))
+                copyright = input("COPYRIGHT  : ")
+                print(end=" " * int((WIDTH - 13) / 2))
+                author = input("AUTHOR     : ")
+                print(end=" " * int((WIDTH - 13) / 2))
+                price = float(input("PRICE      : "))
+                print(end=" " * int((WIDTH - 13) / 2))
+                qty = int(input("QTY        : "))
+                print(end=" " * int((WIDTH - 13) / 2))
+                print(f"TOTAL      : {float(price * qty):.2f}")
+                isokay:bool = update_book(isbn, title, copyright, author, str(price), str(qty))
+
+                if isokay: print("Book updated.".center(WIDTH, " "))
+                else: print("Book not found".center(WIDTH, " "))
+            else: print("Book not edited.".center(WIDTH, " "))
+        else: print("Book not found".center(WIDTH, " "))
     except Exception as err:
         errormessage: str = f"Error: {err}"
         print(end=" " * int((WIDTH - len(errormessage)) / 2))
         print(errormessage)
+        print("Book not edited".center(WIDTH, " "))
+        print()
         return
     
-    isokay:bool = update_book(isbn, title, copyright, author, str(price), str(qty))
+    print()
 
-    if isokay: print("Book updated.".center(WIDTH, " "))
+
+def deletebook() -> None:
+    titlemenu("delete book")
+    print(end=" " * int((WIDTH - 13) / 2))
+    isbn: str = input("ISBN       : ")
+
+    book_data: list = find_book(isbn)
+    if book_data != []:
+        message: str = "Are you sure you want to delete this book? (Y/N): "
+        print(end=" " * int((WIDTH - len(message)) / 2))
+        option: str = input(message)
+        if option.upper() == "Y":
+            isokay: bool = delete_book(isbn)
+            if isokay: print("Book deleted.".center(WIDTH, " ")) 
+            else: print("Book not found".center(WIDTH, " "))
+        else: print("Book not deleted".center(WIDTH, " "))
     else: print("Book not found".center(WIDTH, " "))
+
+
+def displayallbook() -> None:
+    titlemenu("display all book")
+    header: list = ["ISBN", "TITLE", "COPYRIGHT", "AUTHOR", "PRICE", "QTY", "TOTAL"]
+    print("".join(f"{f.upper():<17}" for f in header))
+    print("-" * WIDTH)
+    getall()
+    print("-" * WIDTH)
+    print(end = "" + f"{"":<17}" * 5)
+    final_total: float = gettotal()
+    print(f"{"TOTAL":<17}{final_total:.2f}")
+    print()
 
 def titlemenu(titletext: str) -> None:
     system("cls")

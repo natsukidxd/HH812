@@ -53,6 +53,16 @@ def add_book(*args) -> None:
     data.append(bookdata)
     save_to_file()
 
+def delete_book(isbn: str) -> bool:
+    load()
+    for i, item in enumerate(data):
+        fields: list = item.split(",")
+        if fields[0] == isbn:
+            data.pop(i)
+            save_to_file()
+            return True
+    return False
+
 
 def find_book(isbn: str) -> list:
     load()
@@ -71,4 +81,14 @@ def getall() -> None:
         return
     for item in data:
         flds = item.split(",")
-        print("".join(f"{f.upper():<20}" for f in flds))
+        total: float = float(flds[4]) * int(flds[5])
+        total_str: str = f"{total:.2f}"
+        print("".join(f"{f.upper():<17}" for f in flds) + "".join(f"{total_str:>7}"))
+
+def gettotal() -> float:
+    load()
+    total: float = 0
+    for item in data:
+        flds = item.split(",")
+        total += float(flds[4]) * int(flds[5])
+    return total
