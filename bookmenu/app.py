@@ -1,4 +1,3 @@
-from tkinter import Widget
 from bookapi import *
 from os import system
 
@@ -11,7 +10,7 @@ def addbook() -> None:
     titlemenu("add book")
     isbn: str = ""
     title: str = ""
-    copyright: str = ""
+    copyright: int = 0
     author: str = ""
     price: float = 0
     qty: int = 0
@@ -23,7 +22,7 @@ def addbook() -> None:
             print(end=" " * int((WIDTH - 13) / 2))
             title = input("TITLE      : ")
             print(end=" " * int((WIDTH - 13) / 2))
-            copyright = input("COPYRIGHT  : ")
+            copyright = int(input("COPYRIGHT  : "))
             print(end=" " * int((WIDTH - 13) / 2))
             author = input("AUTHOR     : ")
             print(end=" " * int((WIDTH - 13) / 2))
@@ -32,13 +31,14 @@ def addbook() -> None:
             qty = int(input("QTY        : "))
             print(end=" " * int((WIDTH - 13) / 2))
             print(f"TOTAL      : {float(price * qty):.2f}")
-            add_book(isbn, title, copyright, author, str(price), str(qty))
+            add_book(isbn, title, str(copyright), author, str(price), str(qty))
+            print("Book added".center(WIDTH, " "))
         else: print("ISBN already exists. Try again.".center(WIDTH, " "))
     except Exception as err:
         errormessage: str = f"Error: {err}"
         print(end=" " * int((WIDTH - len(errormessage)) / 2))
         print(errormessage)
-        print("Book was not added.".center(WIDTH, " "))
+        print("Book not added.".center(WIDTH, " "))
         print()
         return
 
@@ -73,7 +73,7 @@ def editbook() -> None:
     titlemenu("edit book")
     isbn: str = ""
     title: str = ""
-    copyright: str = ""
+    copyright: int = 0
     author: str = ""
     price: float = 0
     qty: int = 0
@@ -102,7 +102,7 @@ def editbook() -> None:
                 print(end=" " * int((WIDTH - 13) / 2))
                 title = input("TITLE      : ")
                 print(end=" " * int((WIDTH - 13) / 2))
-                copyright = input("COPYRIGHT  : ")
+                copyright = int(input("COPYRIGHT  : "))
                 print(end=" " * int((WIDTH - 13) / 2))
                 author = input("AUTHOR     : ")
                 print(end=" " * int((WIDTH - 13) / 2))
@@ -111,7 +111,7 @@ def editbook() -> None:
                 qty = int(input("QTY        : "))
                 print(end=" " * int((WIDTH - 13) / 2))
                 print(f"TOTAL      : {float(price * qty):.2f}")
-                isokay:bool = update_book(isbn, title, copyright, author, str(price), str(qty))
+                isokay:bool = update_book(isbn, title, str(copyright), author, str(price), str(qty))
 
                 if isokay: print("Book updated.".center(WIDTH, " "))
                 else: print("Book not found".center(WIDTH, " "))

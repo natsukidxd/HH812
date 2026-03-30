@@ -1,3 +1,5 @@
+from app import WIDTH
+
 filename: str = "books.txt"
 data: list = []
 
@@ -77,7 +79,7 @@ def find_book(isbn: str) -> list:
 def getall() -> None:
     load()
     if not data:
-        print("No records found.")
+        print("No records found.".center(WIDTH, " "))
         return
     for item in data:
         flds = item.split(",")
