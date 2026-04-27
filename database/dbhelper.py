@@ -1,9 +1,9 @@
 from sqlite3 import connect, Row
 
-database_name: str = "school.db"
+database: str = "school.db"
 
 
-def getprocess(sql: str, values: list) -> list:
+def getprocess(sql: str, vals: list) -> list:
     conn: any = None
     cursor: any = None
     data: list = []
@@ -11,52 +11,83 @@ def getprocess(sql: str, values: list) -> list:
         conn = connect(database)
         conn.row_factory = Row
         cursor = conn.cursor()
-        cursor.execute(sql, values)
+        cursor.execute(sql, vals)
         data = cursor.fetchall()
     except Exception as ex:
-        print(f"Error: {ex}")
+        print(f"Error : {ex}")
     finally:
         cursor.close()
         conn.close()
     return data
 
 
-def postprocess(sql: str, values: list) -> bool:
-    pass
-
-
 def getall(table: str) -> list:
-    sql_cmd: str = f"SELECT * FROM `{table}`"
-    return getprocess(sql_cmd, [])
+    sql: str = f"SELECT * FROM `{table}`"
+    return getprocess(sql, [])
 
 
 def getrecord(table: str, **kwargs) -> list:
-    # SELECT * FROM `students` WHERE `lastname` = ? AND `firstname` = ?
     keys: list = list(kwargs.keys())
-    values: list = list(kwargs.values())
-    fields: list = []
-    [fields.append(f"`{key}` = ?") for key in keys]
-    if len(keys) > 1: 
-        field: str = fields.join(" AND ")
-    sql_cmd = f"SELECT  * FROM `{field}`"
-    return getprocess(sql_cmd, values)
+    vals: list = list(kwargs.values())
+    sql: str = f"SELECT * FROM `{table}` WHERE `{keys[0]}`=?"
+    return getprocess(sql, vals)
 
 
-def deleterecord(table: str, **kwargs) -> bool:
-    # DELETE FROM `students` WHERE `idno` = ?
-    keys: list = list(kwargs.keys())
-    values: list = list(kwargs.values())
-    fields: list = []
-    [fields.append(f"`{key}` = ?") for key in keys]
-    if len(keys) > 1:
-        field: str = fields.join(" AND ")
-    sql_cmd = f"DELETE FROM `{field}`"
-    return postprocess(sql_cmd, values)
+def postprocess(sql: str, vals: list) -> bool:
+    print(sql)
+    conn: any = None
+    cursor: any = None
+    try:
+        conn = connect(database)
+        cursor = conn.cursor()
+        cursor.execute(sql, vals)
+        conn.commit()
+    except Exception as ex:
+        conn.rollback()
+        print(f"Error : {ex}")
+    finally:
+        cursor.close()
+        conn.close()
+    return True if cursor.rowcount > 0 else False
 
 
 def addrecord(table: str, **kwargs) -> bool:
-    pass
+    keys: list = list(kwargs.keys())
+    vals: list = list(kwargs.values())
+    qmark: list = "?" * len(vals)
+    flds: str = "`,`".join(keys)
+    dta: str = ",".join(qmark)
+    sql: str = f"INSERT INTO `{table}`(`{flds}`) VALUES ({dta})"
+    return postprocess(sql, vals)
+
+
+def deleterecord(table: str, **kwargs) -> bool:
+    keys: list = list(kwargs.keys())
+    vals: list = list(kwargs.values())
+    sql: str = f"DELETE FROM `{table}` WHERE `{keys[0]}`=?"
+    return postprocess(sql, vals)
 
 
 def updaterecord(table: str, **kwargs) -> bool:
-    pass
+    # UPDATE `students` SET `lastname`=?,`firstname`=?,`course`=?,`level`=? WHERE `idno`='1000'
+    keys: list = list(kwargs.keys())
+    vals: list = list(kwargs.values())
+    flds: list = []
+    newvals: list = []
+    for i in range(1, len(keys)):
+        flds.append("`" + keys[i] + "`=?")
+        newvals.append(vals[i])
+    fld: str = ",".join(flds)
+    sql: str = f"UPDATE `{table}` SET {fld} WHERE `{keys[0]}`='{vals[0]}'"
+    return postprocess(sql, newvals)
+
+
+def main() -> None:
+
+    students: list = getrecord("students", idno="1000")
+    for student in students:
+        print(f"{student['lastname'].upper():<25} {student['firstname'].upper():<25}")
+
+
+if __name__ == "__main__":
+    main()
