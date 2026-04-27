@@ -1,6 +1,9 @@
 from sqlite3 import connect, Row
+import os
 
-database: str = "school.db"
+# Get absolute path to database file relative to this script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+database: str = os.path.join(script_dir, "school.db")
 
 
 def getprocess(sql: str, vals: list) -> list:
